@@ -10,7 +10,7 @@ export default function Home() {
   const [newTodo, setNewTodo] = useState<NewTodo>({
     title: "",
     description: "",
-    date: new Date().toISOString(),
+    date: "", // initially empty
     completed: false,
   });
   const [page, setPage] = useState(1);
@@ -19,6 +19,14 @@ export default function Home() {
   useEffect(() => {
     loadTodos();
   }, [page]);
+
+  // Set date only on client to avoid hydration issues
+  useEffect(() => {
+    setNewTodo((prev) => ({
+      ...prev,
+      date: new Date().toISOString(),
+    }));
+  }, []);
 
   const loadTodos = async () => {
     const { todos, totalPages } = await fetchTodos(page);
@@ -30,7 +38,12 @@ export default function Home() {
     if (!newTodo.title.trim()) return;
     const added = await addTodo(newTodo);
     setTodos((prev) => [added, ...prev]);
-    setNewTodo({ title: "", description: "", date: new Date().toISOString(), completed: false });
+    setNewTodo({
+      title: "",
+      description: "",
+      date: new Date().toISOString(), // still okay here since it's not during initial render
+      completed: false,
+    });
   };
 
   const handleUpdate = async (field: keyof Todo, value: any) => {
@@ -57,7 +70,6 @@ export default function Home() {
     <>
       {/* LOGO HEADER */}
       <header className="flex justify-center items-center gap-3 py-6 bg-white shadow-md">
-       
         <h1 className="text-4xl font-extrabold text-blue-700">TODO List</h1>
       </header>
 
@@ -65,7 +77,7 @@ export default function Home() {
       <main className="min-h-screen flex text-gray-800 bg-gradient-to-tr from-blue-50 to-purple-100 font-sans">
         {/* Left Panel: Todo List */}
         <div className="w-1/2 p-6 border-r border-gray-300 overflow-y-auto bg-white/70 backdrop-blur-md shadow-xl">
-        <img src="favicon.ico" alt="Logo" className="w-50 h-12" />
+          <img src="favicon.ico" alt="Logo" className="w-50 h-12" />
           <h2 className="text-2xl font-bold mb-6 text-blue-700">📋 Your Todos</h2>
 
           <div className="space-y-3 max-h-[65vh] overflow-y-auto pr-2">
@@ -111,7 +123,9 @@ export default function Home() {
             >
               ◀ Prev
             </button>
-            <span className="text-sm font-medium text-gray-600">Page {page} of {totalPages}</span>
+            <span className="text-sm font-medium text-gray-600">
+              Page {page} of {totalPages}
+            </span>
             <button
               disabled={page >= totalPages}
               onClick={() => setPage(page + 1)}
