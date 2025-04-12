@@ -10,7 +10,7 @@ export default function Home() {
   const [newTodo, setNewTodo] = useState<NewTodo>({
     title: "",
     description: "",
-    date: "", // initially empty
+    date: "", 
     completed: false,
   });
   const [page, setPage] = useState(1);
@@ -20,7 +20,6 @@ export default function Home() {
     loadTodos();
   }, [page]);
 
-  // Set date only on client to avoid hydration issues
   useEffect(() => {
     setNewTodo((prev) => ({
       ...prev,
@@ -41,7 +40,7 @@ export default function Home() {
     setNewTodo({
       title: "",
       description: "",
-      date: new Date().toISOString(), // still okay here since it's not during initial render
+      date: new Date().toISOString(), 
       completed: false,
     });
   };

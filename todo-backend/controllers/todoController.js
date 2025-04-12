@@ -1,4 +1,4 @@
-// todoController.js
+
 const Todo = require("../models/Todo");
 
 exports.getTodos = async (req, res) => {
@@ -19,7 +19,7 @@ exports.getTodos = async (req, res) => {
   }
 };
 
-// New endpoint for adding a new todo with due date, priority, and subtasks
+
 exports.addTodo = async (req, res) => {
   const { title, description, dueDate, priority, subtasks } = req.body;
 

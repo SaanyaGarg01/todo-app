@@ -1,7 +1,7 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
-
+in todo-backend add .env to connect to mongodb , and in todo-frontend add api .env
 First, run the development server:
 
 ```bash
